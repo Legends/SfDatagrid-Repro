@@ -20,7 +20,7 @@ namespace SfDatagrid_Repro
 
             var gRow = (e.AddedItems[0] as GridRowInfo);
             var row = gRow.RowData as ItemViewModel;
-            //await _vm.OnSelectionChangedAsync();
+            // ...
             await Task.FromResult(true);
 
         }

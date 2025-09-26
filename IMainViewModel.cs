@@ -13,8 +13,6 @@ namespace SfDatagrid_Repro
         ICommand BeginEditCommand { get; }
         ICommand EndEditCommand { get; }
         ICommand DoubleClickCommand { get; }
-        //Task AddNewItemAsync();
-
 
         bool IsContextmenuOpen { get; set; }
 

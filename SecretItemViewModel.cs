@@ -57,21 +57,21 @@ public class ItemViewModel : INotifyPropertyChanged, IEquatable<ItemViewModel>, 
         }
     }
 
-    private string? _secret = string.Empty;
-    public string? Secret
+    private string? _value = string.Empty;
+    public string? Value
     {
-        get => _secret;
+        get => _value;
         set
         {
-            if (_secret != value)
+            if (_value != value)
             {
-                _secret = value;
+                _value = value;
                 OnPropertyChanged();
             }
         }
     }
 
-    public string? EditingSecret
+    public string? EditingValue
     {
         get;
         set;
@@ -91,37 +91,16 @@ public class ItemViewModel : INotifyPropertyChanged, IEquatable<ItemViewModel>, 
         }
     }
 
-    private int remainingSeconds;
-    public int RemainingSeconds
-    {
-        get => remainingSeconds;
-        set
-        {
-            remainingSeconds = value;
-            OnPropertyChanged();
-        }
-    }
 
-    private int remainingPercent = 10;
-    public int TotpRemainingPercent
-    {
-        get => remainingPercent;
-        set
-        {
-            remainingPercent = value;
-            OnPropertyChanged();
-        }
-    }
 
     #endregion
-
 
     [JsonConstructor]
     public ItemViewModel(int id, string platform, string secret, string? account = null)
     {
         ID = id;
         Platform = platform;
-        Secret = secret;
+        Value = secret;
         Account = account;
     }
 
@@ -172,9 +151,9 @@ public class ItemViewModel : INotifyPropertyChanged, IEquatable<ItemViewModel>, 
         get
         {
             var errors = new List<string>();
+            // ... add error messages for specific properties
 
-
-            return string.Join(" ", errors); // Or use newline: string.Join("\n", errors)
+            return string.Join(" ", errors);
         }
     }
 
@@ -186,7 +165,7 @@ public class ItemViewModel : INotifyPropertyChanged, IEquatable<ItemViewModel>, 
     public bool Equals(ItemViewModel? other)
     {
         return ReferenceEquals(this, other) || other is not null && string.Equals(Platform, other.Platform, StringComparison.Ordinal) &&
-               string.Equals(Secret, other.Secret, StringComparison.Ordinal) &&
+               string.Equals(Value, other.Value, StringComparison.Ordinal) &&
                string.Equals(Account, other.Account, StringComparison.Ordinal);
     }
 
@@ -199,7 +178,7 @@ public class ItemViewModel : INotifyPropertyChanged, IEquatable<ItemViewModel>, 
     {
         return HashCode.Combine(
             Platform is null ? 0 : StringComparer.Ordinal.GetHashCode(Platform),
-            Secret is null ? 0 : StringComparer.Ordinal.GetHashCode(Secret),
+            Value is null ? 0 : StringComparer.Ordinal.GetHashCode(Value),
             Account is null ? 0 : StringComparer.Ordinal.GetHashCode(Account)
         );
     }
@@ -238,7 +217,7 @@ public class ItemViewModel : INotifyPropertyChanged, IEquatable<ItemViewModel>, 
     public void UpdateSelf(ItemViewModel changed)
     {
         this.Platform = changed.Platform;
-        this.Secret = changed.Secret;
+        this.Value = changed.Value;
         this.Account = changed.Account;
     }
 

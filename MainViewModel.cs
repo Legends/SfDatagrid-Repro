@@ -96,7 +96,7 @@ public class MainViewModel : IMainViewModel, INotifyPropertyChanged //, ILocaliz
         AllItems = new ObservableCollection<ItemViewModel>();
         for (int i = 0; i < 5; i++)
         {
-            AllItems.Add(new ItemViewModel(i, $"Platform {i}", $"Secret {i}", $"Account {i}"));
+            AllItems.Add(new ItemViewModel(i, $"Platform {i}", $"Value {i}", $"Account {i}"));
         }
 
         foreach (var item in AllItems)
@@ -110,33 +110,26 @@ public class MainViewModel : IMainViewModel, INotifyPropertyChanged //, ILocaliz
 
     private void SetupCommandEventhandler()
     {
-
-
-        //UpdateSecretCommand = new AsyncCommand<ItemViewModel>(UpdateSecretAsync, null, _logger);
         BeginEditCommand = new RelayCommand<ItemViewModel>(OnBeginEdit);
-        EndEditCommand = new AsyncCommand<ItemViewModel>(OnEndEdit); // Method must be: Task OnEndEditAsync()
-        //SelectionChangedCommand = new AsyncCommand(async _ => await OnSelectionChangedAsync());
-        //SelectionChangedCommand = new AsyncCommand(OnSelectionChangedAsync);
-
-        //DoubleClickCommand = new RelayCommand<ItemViewModel>(OnDoubleClick);
-
-
+        EndEditCommand = new AsyncCommand<ItemViewModel>(OnEndEdit);
     }
 
     #endregion COMMANDS SETUP
 
+    // not used here in this repro
     internal void RefreshView()
     {
         FilteredItems.Clear();
+        var SearchText = string.Empty; // this.SearchTextBox.Text;   
+        var filtered = string.IsNullOrWhiteSpace(SearchText)
+            ? AllItems
+            : AllItems.Where(x =>
+                x.Platform?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ?? false);
 
-        foreach (var item in AllItems)
+        foreach (var item in filtered)
             FilteredItems.Add(item);
     }
-    private void SecretItem_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        //if (e.PropertyName == nameof(SecretItemViewModel.IsBeingEdited))
 
-    }
 
     #region ### COMMANDS DECLARATION ###
 
@@ -166,18 +159,6 @@ public class MainViewModel : IMainViewModel, INotifyPropertyChanged //, ILocaliz
     #endregion REGION COMMANDS
 
 
-
-
-
-
-
-    #region ### UPDATE SECRET ###
-
-
-
-
-
-
     private void OnBeginEdit(ItemViewModel item)
     {
         PreviousVersion = item.Copy();
@@ -188,18 +169,10 @@ public class MainViewModel : IMainViewModel, INotifyPropertyChanged //, ILocaliz
     private async Task OnEndEdit(ItemViewModel item)
     {
         item.IsBeingEdited = false;
-        //OnPropertyChanged(nameof(ShowActionsColumn));
-        await Task.Delay(100); // Allow UI to update
-
-        // Update the secret if valid
-        //await UpdateSecretAsync(item);
-
+        await Task.Delay(100);
         PreviousVersion = null;
     }
 
-
-
-    #endregion
 
 
 }
