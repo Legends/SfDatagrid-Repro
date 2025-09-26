@@ -116,7 +116,10 @@ public class MainViewModel : IMainViewModel, INotifyPropertyChanged //, ILocaliz
 
     #endregion COMMANDS SETUP
 
-    // not used here in this repro
+    /// <summary>
+    /// not used here in this repro
+    /// but could be used for filtering the view?
+    /// </summary>
     internal void RefreshView()
     {
         FilteredItems.Clear();
