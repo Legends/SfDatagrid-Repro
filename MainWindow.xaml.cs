@@ -1,8 +1,8 @@
-﻿using SfDatagrid_Repro.ViewModels;
+﻿using Repro.ViewModels;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.Windows.Shared;
 
-namespace SfDatagrid_Repro
+namespace Repro
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -13,6 +13,7 @@ namespace SfDatagrid_Repro
         {
             InitializeComponent();
             DataContext = new MainViewModel();
+            //System.Windows.Controls.ToolTip
         }
 
         private async void DataGrid_SelectionChanged(object sender, GridSelectionChangedEventArgs e)

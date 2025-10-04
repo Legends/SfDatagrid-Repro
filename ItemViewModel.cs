@@ -1,14 +1,21 @@
-﻿using System.ComponentModel;
+﻿using Syncfusion.Windows.Shared;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 
-namespace SfDatagrid_Repro.ViewModels;
+namespace Repro.ViewModels;
 
-public class ItemViewModel : INotifyPropertyChanged, IEquatable<ItemViewModel>, IEditableObject, IDataErrorInfo
+public class ItemViewModel : NotificationObject, INotifyPropertyChanged, IEditableObject, IDataErrorInfo, IEquatable<ItemViewModel>
 {
+
+    public string? EditingSecret
+    {
+        get;
+        set;
+    }
 
     #region Properties
     private Dictionary<string, object>? _storedValues;
@@ -96,14 +103,24 @@ public class ItemViewModel : INotifyPropertyChanged, IEquatable<ItemViewModel>, 
     #endregion
 
     [JsonConstructor]
-    public ItemViewModel(int id, string platform, string secret, string? account = null)
+    public ItemViewModel(int id, string platform, string value, string? account = null)
     {
         ID = id;
         Platform = platform;
-        Value = secret;
+        Value = value;
         Account = account;
     }
 
+    #region INotifyPropertyChanged
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected void OnPropertyChanged([CallerMemberName] string? name = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
+
+    #endregion
 
     #region IEditableObject Implementation
 
@@ -162,39 +179,13 @@ public class ItemViewModel : INotifyPropertyChanged, IEquatable<ItemViewModel>, 
 
     #region IEquatable & Overrides
 
-    public bool Equals(ItemViewModel? other)
-    {
-        return ReferenceEquals(this, other) || other is not null && string.Equals(Platform, other.Platform, StringComparison.Ordinal) &&
-               string.Equals(Value, other.Value, StringComparison.Ordinal) &&
-               string.Equals(Account, other.Account, StringComparison.Ordinal);
-    }
-
-    public override bool Equals(object? obj)
-    {
-        return obj is ItemViewModel other && Equals(other);
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(
-            Platform is null ? 0 : StringComparer.Ordinal.GetHashCode(Platform),
-            Value is null ? 0 : StringComparer.Ordinal.GetHashCode(Value),
-            Account is null ? 0 : StringComparer.Ordinal.GetHashCode(Account)
-        );
-    }
+    public bool Equals(ItemViewModel? other) => other is not null && ID == other.ID;
+    public override bool Equals(object? obj) => obj is ItemViewModel o && Equals(o);
+    public override int GetHashCode() => ID.GetHashCode();
 
     #endregion
 
-    #region INotifyPropertyChanged
 
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    protected void OnPropertyChanged([CallerMemberName] string? name = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-    }
-
-    #endregion
 
     #region Backup Logic
 
@@ -220,5 +211,6 @@ public class ItemViewModel : INotifyPropertyChanged, IEquatable<ItemViewModel>, 
         this.Value = changed.Value;
         this.Account = changed.Account;
     }
+
 
 }

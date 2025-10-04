@@ -1,12 +1,12 @@
 ﻿
-using SfDatagrid_Repro.Commands;
+using Repro.Commands;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 
-namespace SfDatagrid_Repro.ViewModels;
+namespace Repro.ViewModels;
 
 public class MainViewModel : IMainViewModel, INotifyPropertyChanged //, ILocalizable
 {
@@ -59,7 +59,17 @@ public class MainViewModel : IMainViewModel, INotifyPropertyChanged //, ILocaliz
 
     #region ### ObservableCollections ###
 
-    public ObservableCollection<ItemViewModel> AllItems { get; private set; }
+
+    ObservableCollection<ItemViewModel> _AllItems = new();
+    public ObservableCollection<ItemViewModel> AllItems
+    {
+        get => _AllItems;
+        private set
+        {
+            _AllItems = value;
+            OnPropertyChanged();
+        }
+    }
 
     ObservableCollection<ItemViewModel> _filteredItems = new();
     public ObservableCollection<ItemViewModel> FilteredItems
@@ -99,8 +109,7 @@ public class MainViewModel : IMainViewModel, INotifyPropertyChanged //, ILocaliz
             AllItems.Add(new ItemViewModel(i, $"Platform {i}", $"Value {i}", $"Account {i}"));
         }
 
-        foreach (var item in AllItems)
-            FilteredItems.Add(item);
+
     }
 
 
@@ -172,7 +181,32 @@ public class MainViewModel : IMainViewModel, INotifyPropertyChanged //, ILocaliz
     private async Task OnEndEdit(ItemViewModel item)
     {
         item.IsBeingEdited = false;
-        await Task.Delay(100);
+
+        await Task.FromResult(0);
+        //if (!SecretItemValueComparer.Default.Equals(item, PreviousVersion))
+        //{
+        //    var (isValid, error) = SecretsManager.IsValidSecretItem(item.ToDomain());
+
+        //    if (!isValid)
+        //    {
+        //        _messageService.ShowInfoMessage(ValidationMessageMapper.ToMessage(error));
+        //        return;
+        //    }
+        //    else
+        //    {
+        //        try
+        //        {
+        //            // Update the secret if valid
+        //            await UpdateSecretAsync(item);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            _logger.LogError(ex, UI.ex_UpdatingSecret);
+        //            _messageService.ShowErrorMessage(UI.ex_UpdatingSecret);
+        //        }
+        //    }
+
+        //}
         PreviousVersion = null;
     }
 

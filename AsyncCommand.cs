@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace SfDatagrid_Repro.Commands
+namespace Repro.Commands
 {
     public class AsyncCommand : ICommand
     {

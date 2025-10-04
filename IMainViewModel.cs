@@ -1,9 +1,9 @@
-﻿using SfDatagrid_Repro.ViewModels;
+﻿using Repro.ViewModels;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
 
-namespace SfDatagrid_Repro
+namespace Repro
 {
     public interface IMainViewModel : INotifyPropertyChanged
     {

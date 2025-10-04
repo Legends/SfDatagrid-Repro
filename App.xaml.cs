@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace SfDatagrid_Repro
+namespace Repro
 {
     /// <summary>
     /// Interaction logic for App.xaml
